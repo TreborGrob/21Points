@@ -1,0 +1,5 @@
+aiogram~=2.23.1
+mysql-connector-python~=8.0.31
+SQLAlchemy~=1.4.45
+dynaconf~=3.1.9
+dynaconf[ini]
