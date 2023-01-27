@@ -6,6 +6,7 @@ settings = Dynaconf(
     settings_files=['settings.ini'],  # Load files in the given order.
 )
 
+ADMIN_ID = settings.admin_id
 TOKEN = settings.token
 
 if __name__ == "__main__":

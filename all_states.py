@@ -8,3 +8,7 @@ class OnlineAction(StatesGroup):
     move_player1 = State()
     move_player2 = State()
     result_game = State()
+
+
+class CommandAction(StatesGroup):
+    st_review = State()

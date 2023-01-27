@@ -4,6 +4,8 @@ import platform
 from aiogram import Bot, Dispatcher, types
 from aiogram.dispatcher import FSMContext
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
+
+from commands import set_default_commands, register_command
 from config import TOKEN
 from all_states import OnlineAction
 from database import insert_to_db, select_player, update_score, insert_to_rating, select_rating, update_desire, \
@@ -17,6 +19,10 @@ logger = logging.getLogger(__name__)
 bot = Bot(token=TOKEN, parse_mode=types.ParseMode.HTML)
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
+
+
+async def on_startup(dispatcher):
+    await set_default_commands(dispatcher)
 
 
 @dp.message_handler(commands=['start'], state='*')
@@ -41,12 +47,21 @@ async def accept(callback: types.CallbackQuery):
 
 
 @dp.callback_query_handler(text='plus', state='*')
+# @dp.message_handler(commands=["game"], state="*")
 async def choice(callback: types.CallbackQuery, state: FSMContext):
-    info_player = select_player(callback.from_user.id)
-    games = info_player[0]
-    wins = info_player[1]
-    loses = info_player[2]
-    draws = info_player[3]
+    try:
+        info_player = select_player(callback.from_user.id)
+        games = info_player[0]
+        wins = info_player[1]
+        loses = info_player[2]
+        draws = info_player[3]
+    except Exception as e:
+        logger.info(e)
+        insert_to_db(id_tg=callback.from_user.id, nickname=callback.from_user.first_name)
+        games = 0
+        wins = 0
+        loses = 0
+        draws = 0
     await callback.message.delete_reply_markup()
     await callback.answer()
     id_gamer = callback.from_user.id
@@ -256,6 +271,7 @@ async def online_game(callback: types.CallbackQuery, state: FSMContext):
 
 
 @dp.callback_query_handler(text='result', state='*')
+# @dp.message_handler(commands=["stats"], state="*")
 async def stats(callback: types.CallbackQuery):
     await callback.answer()
     try:
@@ -351,6 +367,8 @@ async def main():
         format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
     )
     logger.error("Starting bot")
+    await on_startup(dp)
+    register_command(dp)
     try:
         await dp.start_polling()
 
