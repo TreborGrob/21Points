@@ -1,10 +1,9 @@
 import random
-from mysql.connector import Error, connect
 from database import wait_gamers, update_desire, add_in_game
 from aiogram import types, Bot
 from inline_kb import inline_choose2
+from config import TOKEN
 
-TOKEN = "5599372356:AAENNx7-DQCXqXUS381lDgVvpEa1GLqeljI"
 bot = Bot(token=TOKEN, parse_mode=types.ParseMode.HTML)
 
 
@@ -34,14 +33,4 @@ async def connection_game(robot, plr1, plr2):
 
 
 if __name__ == '__main__':
-    try:
-        with connect(
-                host="localhost",
-                user="pointstwoone",
-                password="vlowkz3O!",
-        ) as connection:
-            create_db_query = "CREATE DATABASE online_points"
-            with connection.cursor() as cursor:
-                cursor.execute(create_db_query)
-    except Error as e:
-        print(e)
+    pass
