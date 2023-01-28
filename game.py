@@ -78,15 +78,15 @@ async def choice(callback: types.CallbackQuery, state: FSMContext):
         await callback.message.answer(f'⚖Ничья!\nУ вас {points} очков, у дилера {dealer_score} очков.',
                                       reply_markup=inline_menu)
         await state.finish()
-        update_score(id_gamer, games+1, wins, loses, draws+1, 'draw')
+        update_score(id_gamer, games + 1, wins, loses, draws + 1, 'draw')
     elif points > 21 or dealer_score == 21:
         await callback.message.answer(f'🏳{nick} проиграл!\n', reply_markup=inline_menu)
         await state.finish()
-        update_score(id_gamer, games+1, wins, loses+1, draws, 'lose')
+        update_score(id_gamer, games + 1, wins, loses + 1, draws, 'lose')
     elif points == 21 or dealer_score > 21:
         await callback.message.answer(f'🥇{nick} выиграл! Поздравляем!\n', reply_markup=inline_menu)
         await state.finish()
-        update_score(id_gamer, games+1, wins+1, loses, draws)
+        update_score(id_gamer, games + 1, wins + 1, loses, draws)
     elif 21 > dealer_score >= 19 > points:
         card_user = card_random()
         points = issuance_of_card(points, card_user)
@@ -98,15 +98,15 @@ async def choice(callback: types.CallbackQuery, state: FSMContext):
             await callback.message.answer(f'⚖Ничья!\nУ вас {points} очков, у дилера {dealer_score} очков.',
                                           reply_markup=inline_menu)
             await state.finish()
-            update_score(id_gamer, games+1, wins, loses, draws+1, 'draw')
+            update_score(id_gamer, games + 1, wins, loses, draws + 1, 'draw')
         elif points > 21:
             await callback.message.answer(f'🏳{nick} проиграл!', reply_markup=inline_menu)
             await state.finish()
-            update_score(id_gamer, games+1, wins, loses+1, draws, 'lose')
+            update_score(id_gamer, games + 1, wins, loses + 1, draws, 'lose')
         elif 21 >= points > dealer_score:
             await callback.message.answer(f'🥇{nick} одержал победу!', reply_markup=inline_menu)
             await state.finish()
-            update_score(id_gamer, games+1, wins+1, loses, draws)
+            update_score(id_gamer, games + 1, wins + 1, loses, draws)
     elif dealer_score < 21 > points:
         card = card_random()
         card_user = card_random()
@@ -122,15 +122,15 @@ async def choice(callback: types.CallbackQuery, state: FSMContext):
             await callback.message.answer(f'⚖Ничья!\nУ вас {points} очков, у дилера {dealer_score} очков.',
                                           reply_markup=inline_menu)
             await state.finish()
-            update_score(id_gamer, games+1, wins, loses, draws+1, 'draw')
+            update_score(id_gamer, games + 1, wins, loses, draws + 1, 'draw')
         elif points > 21 or dealer_score == 21:
             await callback.message.answer(f'🏳{nick} проиграл!\n', reply_markup=inline_menu)
             await state.finish()
-            update_score(id_gamer, games+1, wins, loses+1, draws, 'lose')
+            update_score(id_gamer, games + 1, wins, loses + 1, draws, 'lose')
         elif points == 21 or dealer_score > 21:
             await callback.message.answer(f'🥇{nick} выиграл! Поздравляем!\n', reply_markup=inline_menu)
             await state.finish()
-            update_score(id_gamer, games+1, wins+1, loses, draws)
+            update_score(id_gamer, games + 1, wins + 1, loses, draws)
 
     else:
         await callback.message.answer('Нет такого исхода!', reply_markup=inline_menu)
@@ -157,26 +157,26 @@ async def choice_m(callback: types.CallbackQuery, state: FSMContext):
         await callback.message.answer(f'🏳Вы проиграли!\nУ вас {points} очков, у дилера {dealer_score} очков',
                                       reply_markup=inline_choose)
         await state.finish()
-        update_score(id_gamer, games+1, wins, loses+1, draws, 'lose')
-    elif points > dealer_score and dealer_score < 19:
-        while dealer_score < 19:
+        update_score(id_gamer, games + 1, wins, loses + 1, draws, 'lose')
+    elif points > dealer_score and dealer_score <= 19:
+        while dealer_score <= 19:
             if 18 < dealer_score < 21 and dealer_score > points:
                 await callback.message.answer(f'🏳Вы проиграли, у вас {points} очков, у дилера {dealer_score} очков',
                                               reply_markup=inline_choose)
                 await state.finish()
-                update_score(id_gamer, games+1, wins, loses+1, draws, 'lose')
+                update_score(id_gamer, games + 1, wins, loses + 1, draws, 'lose')
                 break
             elif points == dealer_score == 21:
                 await callback.message.answer(f'⚖Ничья!\nУ вас {points} очков, у дилера {dealer_score} очков.',
                                               reply_markup=inline_menu)
                 await state.finish()
-                update_score(id_gamer, games+1, wins, loses, draws+1, 'draw')
+                update_score(id_gamer, games + 1, wins, loses, draws + 1, 'draw')
                 break
-            elif dealer_score > 21:
+            elif dealer_score > 21 or 21 > points > dealer_score > 19:
                 await callback.message.answer(f'🥇Вы победили, у вас {points} очков, у дилера {dealer_score} очков',
                                               reply_markup=inline_choose)
                 await state.finish()
-                update_score(id_gamer, games+1, wins+1, loses, draws)
+                update_score(id_gamer, games + 1, wins + 1, loses, draws)
                 break
             else:
                 card = card_random()
@@ -187,41 +187,43 @@ async def choice_m(callback: types.CallbackQuery, state: FSMContext):
                                   f'у дилера {dealer_score} очков'
                     await callback.message.answer(text_dealer, reply_markup=inline_choose)
                     await state.finish()
-                    update_score(id_gamer, games+1, wins, loses+1, draws, 'lose')
+                    update_score(id_gamer, games + 1, wins, loses + 1, draws, 'lose')
+                    break
                 elif points == dealer_score <= 21:
                     text_dealer = f'Дилеру выпала карта {card}.\n⚖Ничья!\nУ вас {points} очков, ' \
                                   f'у дилера {dealer_score} очков.'
                     await callback.message.answer(text_dealer, reply_markup=inline_choose)
                     await state.finish()
-                    update_score(id_gamer, games+1, wins, loses, draws+1, 'draw')
+                    update_score(id_gamer, games + 1, wins, loses, draws + 1, 'draw')
                     break
                 elif dealer_score > 21:
                     text_dealer = f'Дилеру попалась карта {card}.\n' \
                                   f'🥇Вы победили, у вас {points} очков, у дилера {dealer_score} очков'
                     await callback.message.answer(text_dealer, reply_markup=inline_choose)
                     await state.finish()
-                    update_score(id_gamer, games+1, wins+1, loses, draws)
+                    update_score(id_gamer, games + 1, wins + 1, loses, draws)
+                    break
                 else:
                     if 18 < dealer_score <= 21 and dealer_score > points:
                         text_dealer = f'Дилеру выпала карта {card}.\n🏳Вы проиграли, у вас {points} очков, ' \
                                       f'у дилера {dealer_score} очков'
                         await callback.message.answer(text_dealer, reply_markup=inline_choose)
                         await state.finish()
-                        update_score(id_gamer, games+1, wins, loses+1, draws, 'lose')
+                        update_score(id_gamer, games + 1, wins, loses + 1, draws, 'lose')
 
                     elif points == dealer_score <= 21:
                         text_dealer = f'Дилеру выпала карта {card}.\n⚖Ничья!\nУ вас {points} очков, ' \
                                       f'у дилера {dealer_score} очков.'
                         await callback.message.answer(text_dealer, reply_markup=inline_choose)
                         await state.finish()
-                        update_score(id_gamer, games+1, wins, loses, draws+1, 'draw')
+                        update_score(id_gamer, games + 1, wins, loses, draws + 1, 'draw')
 
                     elif dealer_score > 21:
                         text_dealer = f'Дилеру выпала карта {card}.\n🥇Вы победили, у вас {points} очков, ' \
                                       f'у дилера {dealer_score} очков'
                         await callback.message.answer(text_dealer, reply_markup=inline_choose)
                         await state.finish()
-                        update_score(id_gamer, games+1, wins+1, loses, draws)
+                        update_score(id_gamer, games + 1, wins + 1, loses, draws)
 
                     else:
                         text_dealer = display_point(callback.from_user.first_name, card, dealer_score, True)
